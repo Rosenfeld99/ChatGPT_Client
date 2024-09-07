@@ -15,3 +15,34 @@
     text-decoration: none;
     color: inherit;
   }
+
+  /* costum scrollbar */
+  /* Customize the scrollbar for webkit-based browsers */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height for horizontal scrollbar */
+}
+
+/* Track (the background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Color of the scrollbar track */
+  border-radius: 10px;
+}
+
+/* Handle (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: #545455; /* Color of the scrollbar handle */
+  border-radius: 10px;
+  border: 3px solid #f0f0f0; /* Space around the scrollbar handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #545455;
+}
+
+/* Customize scrollbar corner for two-way scrolling elements */
+::-webkit-scrollbar-corner {
+  background: #f0f0f0; /* Same color as track */
+}
+
