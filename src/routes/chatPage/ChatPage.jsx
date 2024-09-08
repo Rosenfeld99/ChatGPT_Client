@@ -22,7 +22,7 @@ const ChatPage = () => {
     <div className="chatPage">
       <div className="wrapper">
         <div className="chat">
-          {
+          {/* {
             history?.map((message, i) => (
               <>
                 <div
@@ -35,7 +35,7 @@ const ChatPage = () => {
                 </div>
 
               </>
-            ))}
+            ))} */}
             <NewPrompt />
         </div>
       </div>
