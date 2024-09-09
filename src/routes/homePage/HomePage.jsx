@@ -5,6 +5,15 @@ import { TypeAnimation } from 'react-type-animation'
 
 const HomePage = () => {
   const [typingStatus, setTypingStatus] = useState("human1");
+
+  const testAPI = async () => {
+    const t = await fetch('http://localhost:3000/api/test', {
+      credentials: 'include'
+    })
+    console.log(t.body);
+    
+  }
+
   return (
     <div className="homepage">
       <img src="/orbital.png" alt="" className="orbital" />
@@ -15,6 +24,7 @@ const HomePage = () => {
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat sint
           dolorem doloribus, architecto dolor.
         </h3>
+        <button onClick={testAPI}>TEST AUTH</button>
         <Link to="/dashboard">Get Started</Link>
       </div>
       <div className="right">
@@ -30,7 +40,7 @@ const HomePage = () => {
                   ? "/human1.jpeg"
                   : typingStatus === "human2"
                     ? "/human2.jpeg"
-                    : 
+                    :
                     "bot.png"
               }
               alt=""
