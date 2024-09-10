@@ -1,8 +1,21 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import "./chatList.css";
+import { useQuery } from '@tanstack/react-query';
 
 const ChatList = () => {
+    const { isLoading, error, data } = useQuery({
+        queryKey: ['repoData'],
+        queryFn: () =>
+            fetch(`http://localhost:3000/api/userchats`, {
+                credentials: "include"
+            }).then((res) =>
+                res.json(),
+            ),
+    })
+    console.log(data);
+
+
     const textList = [
         "chat list Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis dolorum explicabo eius.",
         "eius.",
@@ -18,22 +31,19 @@ const ChatList = () => {
             <hr />
             <span className="title">RECENT CHATS</span>
             <div className="list">
-                {/* {isPending
-        ? "Loading..."
-        : error
-        ? "Something went wrong!"
-        : data?.map((chat) => (
-            <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
-              {chat.title}
-            </Link>
-          ))} */}
-                {textList?.map((text) => (
-                    <p>
-                        {text.substring(0, 50)}
-                        <div className="endLine" />
-                    </p>
-                ))}
+                {isLoading
+                    ? "Loading..."
+                    : error
+                        ? "Something went wrong!"
+                        : data?.map((chat) => (
+                            <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
+                                <p>
 
+                                    {chat.title}
+                                    <div className="endLine" />
+                                </p>
+                            </Link>
+                        ))}
             </div>
             <hr />
             <div className="upgrade">
