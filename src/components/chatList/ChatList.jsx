@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const ChatList = () => {
     const { isLoading, error, data } = useQuery({
-        queryKey: ['repoData'],
+        queryKey: ['userChats'],
         queryFn: () =>
             fetch(`http://localhost:3000/api/userchats`, {
                 credentials: "include"
@@ -36,12 +36,9 @@ const ChatList = () => {
                     : error
                         ? "Something went wrong!"
                         : data?.map((chat) => (
-                            <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
-                                <p>
-
-                                    {chat.title}
-                                    <div className="endLine" />
-                                </p>
+                            <Link className='singleItem' to={`/dashboard/chats/${chat._id}`} key={chat._id}>
+                                {chat.title}
+                                <div className="endLine" />
                             </Link>
                         ))}
             </div>

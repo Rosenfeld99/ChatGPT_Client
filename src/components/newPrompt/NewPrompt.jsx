@@ -4,8 +4,9 @@ import Upload from '../upload/Upload'
 import { IKImage } from 'imagekitio-react'
 import model from '../../lib/gemini'
 import Markdown from "react-markdown";
+import { QueryClient, useMutation, } from "@tanstack/react-query"
 
-const NewPrompt = () => {
+const NewPrompt = ({ data }) => {
     const [question, setQuestion] = useState("")
     const [answer, setAnswer] = useState("")
     const endRef = useRef()
@@ -14,6 +15,43 @@ const NewPrompt = () => {
         error: "",
         dbData: {},
         aiData: {},
+    });
+
+    console.log(data);
+    
+
+    const mutation = useMutation({
+        mutationFn: () => {
+            return fetch(`http://localhost:3000/api/chats/${data._id}`, {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    question: question.length ? question : undefined,
+                    answer,
+                    img: img.dbData?.filePath || undefined,
+                }),
+            }).then((res) => res.json());
+        },
+        onSuccess: () => {
+            QueryClient
+                .invalidateQueries({ queryKey: ["chat", data._id] })
+                .then(() => {
+                    setQuestion("");
+                    setAnswer("");
+                    setImg({
+                        isLoading: false,
+                        error: "",
+                        dbData: {},
+                        aiData: {},
+                    });
+                });
+        },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const chat = model.startChat({
@@ -32,41 +70,58 @@ const NewPrompt = () => {
         }
     });
 
+    // const chat = model.startChat({
+    //     history: [
+    //       data?.history.map(({ role, parts }) => ({
+    //         role,
+    //         parts: [{ text: parts[0].text }],
+    //       })),
+    //     ],
+    //     generationConfig: {
+    //       // maxOutputTokens: 100,
+    //     },
+    //   });
+
     useEffect(() => {
         endRef?.current && endRef?.current.scrollIntoView({ behavior: "smooth" })
-    }, [answer, question, img.dbData])
+    }, [data, answer, question, img.dbData])
 
-    const add = async (text) => {
-        const result = await chat.sendMessageStream(
-            Object.entries(img.aiData).length ? [img.aiData, text] : [text]
-        );
-        let accumulatedText = "";
-        for await (const chunk of result.stream) {
-            const chunkText = chunk.text();
-            console.log(chunkText);
-            accumulatedText += chunkText;
-            setAnswer(accumulatedText);
+    const add = async (text, isInitial) => {
+        if (!isInitial) setQuestion(text);
+
+        try {
+            const result = await chat.sendMessageStream(
+                Object.entries(img.aiData).length ? [img.aiData, text] : [text]
+            );
+            let accumulatedText = "";
+            for await (const chunk of result.stream) {
+                const chunkText = chunk.text();
+                console.log(chunkText);
+                accumulatedText += chunkText;
+                setAnswer(accumulatedText);
+            }
+
+            mutation.mutate();
+        } catch (err) {
+            console.log(err);
         }
-        setImg({
-            isLoading: false,
-            error: "",
-            dbData: {},
-            aiData: {},
-        })
+    };
 
-    }
+    useEffect(() => {
+        if (data?.history?.length === 1) {
+            add(data.history[0].parts[0].text, true);
+        }
+    }, [])
 
     const onSub = async (e) => {
         e.preventDefault();
 
-        const text = e.target.text.value
+        const text = e.target.text.value;
+        if (!text) return;
 
-        if (!text) {
-            return
-        }
-
-        add(text)
-    }
+        add(text, false);
+        e.target.text.value = ""
+    };
 
     return (
         <div>
