@@ -9,6 +9,7 @@ import RootLayout from './layouts/rootLayout/RootLayout';
 import DashboardLayout from './layouts/dashboardLayout/DashboardLayout';
 import SignInPage from './routes/signInPage/SignInPage';
 import SignUpPage from './routes/signUpPage/SignUpPage';
+import NotFoundPage from './routes/notFoundPage/NotFoundPage';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
             element: <ChatPage />,
           },
         ],
+      },
+      {
+        path: "/*",
+        element: <NotFoundPage/>,
       },
     ],
   },
