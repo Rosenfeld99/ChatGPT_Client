@@ -75,8 +75,11 @@ const Upload = ({ setImg }) => {
         ref={ikUploadRef}
       />
       {
-        <label onClick={() => ikUploadRef.current.click()}>
-          <img src="/attachment.png" alt="" />
+        <label
+          onClick={() => ikUploadRef.current.click()}
+          className="rounded-full bg-[#605e68] border-none p-2 flex items-center justify-center cursor-pointer"
+        >
+          <img className="w-4 h-4" src="/attachment.png" alt="" />
         </label>
       }
     </IKContext>

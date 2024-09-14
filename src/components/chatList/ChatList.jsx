@@ -1,49 +1,59 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-import "./chatList.css";
+// import "./chatList.css";
+import { useQuery } from '@tanstack/react-query';
 
-const ChatList = () => {
-    const textList = [
-        "chat list Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis dolorum explicabo eius.",
-        "eius.",
-        "sit amet, consectetur adipisicing",
-        "chat list Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis dolorum explicabo eius.",
-    ]
+const ChatList = ({ setIsOPen, isOPen }) => {
+    const { isLoading, error, data } = useQuery({
+        queryKey: ['userChats'],
+        queryFn: () =>
+            fetch(`http://localhost:3000/api/userchats`, {
+                credentials: "include"
+            }).then((res) =>
+                res.json()
+            ),
+    })
+    console.log(data);
+
+    console.log(isOPen);
+
+
     return (
-        <div className="chatList">
-            <span className="title">DASHBOARD</span>
-            <Link to="/dashboard">Create a new Chat</Link>
-            <Link to="/">Explore Lama AI</Link>
-            <Link to="/">Contact</Link>
-            <hr />
-            <span className="title">RECENT CHATS</span>
-            <div className="list">
-                {/* {isPending
-        ? "Loading..."
-        : error
-        ? "Something went wrong!"
-        : data?.map((chat) => (
-            <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
-              {chat.title}
-            </Link>
-          ))} */}
-                {textList?.map((text) => (
-                    <p>
-                        {text.substring(0, 50)}
-                        <div className="endLine" />
-                    </p>
-                ))}
-
+        <div className="flex flex-col h-full bg-[#1e1e1e] ps-5 xl:ps-16 flex-1 pb-4 lg:bg-[#1e1e1e] lg:w-[21.35rem] xl:w-[24.1rem]">
+            <span className="font-semibold text-xs mb-2">DASHBOARD</span>
+            <Link to="/dashboard" className="p-2 rounded-lg hover:bg-[#3c3c3c]" onClick={() => setIsOPen && setIsOPen(false)}>Create a new Chat</Link>
+            <Link to="/" className="p-2 rounded-lg hover:bg-[#3c3c3c]" onClick={() => setIsOPen && setIsOPen(false)}>Explore CHAT AI</Link>
+            <Link to="/" className="p-2 rounded-lg hover:bg-[#3c3c3c]" onClick={() => setIsOPen && setIsOPen(false)}>Contact</Link>
+            <hr className="border-none h-[2px] bg-gray-300 opacity-10 rounded-lg my-5" />
+            <span className="font-semibold text-xs mb-2">RECENT CHATS</span>
+            <div className="flex flex-col overflow-y-auto overflow-x-auto flex-1">
+                {isLoading
+                    ? "Loading...console"
+                    : error
+                        ? "Something went wrong!"
+                        : data?.reverse()?.map((chat) => (
+                            <Link
+                                onClick={() => setIsOPen && setIsOPen(false)}
+                                className="relative p-2 rounded-lg hover:bg-[#3c3c3c] mr-4"
+                                to={`/dashboard/chats/${chat._id}`}
+                                key={chat._id}
+                            >
+                                {chat.title}
+                                <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-r from-[#1e1e1e00] via-[#1e1e1e41] to-[#1e1e1e] hover:opacity-0 transition-opacity duration-300" />
+                            </Link>
+                        ))}
             </div>
-            <hr />
-            <div className="upgrade">
-                <img src="/logo.png" alt="" />
-                <div className="texts">
-                    <span>Upgrade to Lama AI Pro</span>
-                    <span>Get unlimited access to all features</span>
+            <hr className="border-none h-[2px] bg-gray-300 opacity-10 rounded-lg my-5" />
+            <div className="mt-auto flex items-center gap-2 text-sm">
+                <img src="/logo.png" alt="" className="w-6 h-6" />
+                <div className="flex flex-col">
+                    <span className="font-semibold">Upgrade to Lama AI Pro</span>
+                    <span className="text-gray-400">Get unlimited access to all features</span>
                 </div>
             </div>
-        </div>)
+        </div>
+    );
+
 }
 
 export default ChatList

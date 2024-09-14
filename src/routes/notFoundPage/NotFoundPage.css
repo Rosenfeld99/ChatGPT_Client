@@ -1,0 +1,36 @@
+.pageNotFound {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .imageNotFound {
+    width: 500px;
+  }
+
+  a.btnBackHome {
+    padding: 15px 25px;
+    background-color: #217bfe;
+    color: white;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background-color: white;
+      color: #217bfe;
+      transform: scale(1.1);
+    }
+  }
+}
+
+@media (max-width:780px) {
+    .pageNotFound{
+        background-color: red;
+        .imageNotFound{
+            width: 250px;
+        }
+    }
+}
