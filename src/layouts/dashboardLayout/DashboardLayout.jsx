@@ -2,7 +2,7 @@ import { useAuth } from '@clerk/clerk-react'
 import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import ChatList from '../../components/chatList/ChatList';
-import './dashboardLayout.css'
+// import './dashboardLayout.css'
 
 const DashboardLayout = () => {
 
@@ -16,16 +16,20 @@ const DashboardLayout = () => {
     }
   }, [isLoaded, userId, navigate]);
 
-  if (!isLoaded) return "Loading...";
+  // if (!isLoaded) return "Loading... uuuu";
   return (
-    <div className="dashboardLayout">
-      <div className="menu">
-        <ChatList/>
+    <div className="flex xl:gap-12 h-full">
+      {/* desktop menu */}
+      <div className="hidden lg:block">
+        <ChatList />
       </div>
-      <div className="content">
+
+      <div className="flex-1">
         <Outlet />
       </div>
-    </div>)
+    </div>
+  );
+
 }
 
 export default DashboardLayout
