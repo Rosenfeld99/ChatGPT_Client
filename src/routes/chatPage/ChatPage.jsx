@@ -23,7 +23,7 @@ const ChatPage = () => {
       <div className="flex-1 pt-12 w-full overflow-auto flex justify-center rounded-2xl bg-[#252526]">
         <div className="w-full md:w-[80%] 2xl:w-1/2 px-5 md:px-0 flex flex-col gap-5 py-4">
           {isPending
-            ? <span>Loading...</span>
+            ? <span className=' flex items-center gap-5'>Loading... <img className='w-5 aspect-square' src="https://global.discourse-cdn.com/sitepoint/original/3X/e/3/e352b26bbfa8b233050087d6cb32667da3ff809c.gif" alt="" /></span>
             : error
               ? <span>Something went wrong!</span>
               : data?.history?.map((message, i) => (
@@ -42,8 +42,8 @@ const ChatPage = () => {
                   )}
                   <div
                     className={` ${message.role === "user"
-                        ? "bg-[#1e1e1e] rounded-2xl px-5 max-w-[80%] self-end py-2"
-                        : "  max-w-[80%] px-3"
+                      ? "bg-[#1e1e1e] rounded-2xl px-5 max-w-[80%] self-end py-2"
+                      : "  max-w-[80%] px-3"
                       }`}
                   >
                     <Markdown>{message.parts[0].text}</Markdown>
