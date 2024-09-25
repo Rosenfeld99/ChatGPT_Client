@@ -49,22 +49,25 @@ const router = createBrowserRouter([
   },
 ]);
 
- // protected clerk
- const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
- const FRONTEND_API = import.meta.env.VITE_CLERK_FRONTEND_API;
+// protected clerk
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const FRONTEND_API = import.meta.env.VITE_CLERK_FRONTEND_API;
 
- if (!PUBLISHABLE_KEY || !FRONTEND_API) {
-   throw new Error("Missing Publishable Key or Frontend API");
- }
- 
- ReactDOM.createRoot(document.getElementById('root')).render(
-   <React.Fragment>
-     <ClerkProvider 
-       publishableKey={PUBLISHABLE_KEY} 
-       frontendApi={FRONTEND_API} 
-       afterSignOutUrl="/"
-     >
-       <RouterProvider router={router} />
-     </ClerkProvider>
-   </React.Fragment>
- );
+if (!PUBLISHABLE_KEY || !FRONTEND_API) {
+  throw new Error("Missing Publishable Key or Frontend API");
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.Fragment>
+    <ClerkProvider
+      publishableKey={PUBLISHABLE_KEY}
+      frontendApi={FRONTEND_API}
+      afterSignOutUrl="/"
+    >
+      <RouterProvider
+        router={router}
+        basename="/ChatGPT_Client" // This makes sure the paths are relative to the subdirectory
+      />
+    </ClerkProvider>
+  </React.Fragment>
+);
