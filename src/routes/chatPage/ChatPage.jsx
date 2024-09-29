@@ -1,19 +1,21 @@
-// import "./chatPage.css";
 import NewPrompt from '../../components/newPrompt/NewPrompt';
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Markdown from "react-markdown";
 import { IKImage } from "imagekitio-react";
 import React from 'react';
+import { useAuth } from '@clerk/clerk-react';
 
 const ChatPage = () => {
+  const { userId } = useAuth()
+
   const path = useLocation().pathname;
   const chatId = path.split("/").pop();
 
   const { isPending, error, data } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: () =>
-      fetch(`http://localhost:3000/api/chats/${chatId}`, {
+      fetch(`https://chatgpt-backend-ggqm.onrender.com/api/chats/${chatId}/${userId}`, {
         credentials: "include",
       }).then((res) => res.json()),
   });
@@ -23,7 +25,7 @@ const ChatPage = () => {
       <div className="flex-1 pt-12 w-full overflow-auto flex justify-center rounded-2xl bg-[#252526]">
         <div className="w-full md:w-[80%] 2xl:w-1/2 px-5 md:px-0 flex flex-col gap-5 py-4">
           {isPending
-            ? <span className=' flex items-center gap-5'>Loading... <img className='w-5 aspect-square' src="https://global.discourse-cdn.com/sitepoint/original/3X/e/3/e352b26bbfa8b233050087d6cb32667da3ff809c.gif" alt="" /></span>
+            ? <span className=' flex items-center gap-5'>Loading... <img loading='lazy' className='w-5 aspect-square' src="/public/loadingGif.gif" alt="" /></span>
             : error
               ? <span>Something went wrong!</span>
               : data?.history?.map((message, i) => (
