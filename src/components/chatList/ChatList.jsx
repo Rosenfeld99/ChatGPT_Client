@@ -24,7 +24,7 @@ const ChatList = ({ setIsOPen, isOPen }) => {
             <span className="font-semibold text-xs mb-2">RECENT CHATS</span>
             <div className="flex flex-col overflow-y-auto overflow-x-auto flex-1">
                 {isLoading
-                    ? <span className=' flex items-center gap-5'>Loading... <img loading='lazy' className='w-5 aspect-square' src="/public/loadingGif.gif" alt="" /></span>
+                    ? <span className=' flex items-center gap-5'>Loading... <img loading='lazy' className='w-5 aspect-square' src="/loadingGif.gif" alt="" /></span>
                     : error
                         ? "Something went wrong!"
                         : data?.length > 0 && data?.reverse()?.map((chat) => (
