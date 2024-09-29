@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/clerk-react";
 import { IKContext, IKImage, IKUpload } from "imagekitio-react";
 import { useRef } from "react";
 
@@ -5,8 +6,10 @@ const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
 
 const authenticator = async () => {
+  console.log("urlEndpoint :", urlEndpoint, "publicKey :", publicKey);
+
   try {
-    const response = await fetch("http://localhost:3000/api/upload");
+    const response = await fetch(`https://chatgpt-backend-ggqm.onrender.com/api/upload`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -79,7 +82,7 @@ const Upload = ({ setImg }) => {
           onClick={() => ikUploadRef.current.click()}
           className="rounded-full bg-[#605e68] border-none p-2 flex items-center justify-center cursor-pointer"
         >
-          <img className="w-4 h-4" src="/attachment.png" alt="" />
+          <img loading='lazy' className="w-4 h-4" src="/attachment.png" alt="" />
         </label>
       }
     </IKContext>

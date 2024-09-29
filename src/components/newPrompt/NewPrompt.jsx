@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-// import './newPrompt.css'
 import Upload from '../upload/Upload'
 import { IKImage } from 'imagekitio-react'
 import model from '../../lib/gemini'
 import Markdown from "react-markdown";
 import { QueryClient, useMutation, } from "@tanstack/react-query"
+import { useAuth } from '@clerk/clerk-react';
 
 const NewPrompt = ({ data }) => {
+    const { userId } = useAuth()
+
     const [question, setQuestion] = useState("")
     const [answer, setAnswer] = useState("")
     const endRef = useRef()
@@ -17,12 +19,12 @@ const NewPrompt = ({ data }) => {
         aiData: {},
     });
 
-    console.log(data);
+    // console.log(data);
 
 
     const mutation = useMutation({
         mutationFn: () => {
-            return fetch(`http://localhost:3000/api/chats/${data._id}`, {
+            return fetch(`https://chatgpt-backend-ggqm.onrender.com/api/chats/${data._id}/${userId}`, {
                 method: "PUT",
                 credentials: "include",
                 headers: {
@@ -151,7 +153,7 @@ const NewPrompt = ({ data }) => {
                     className="flex-1 py-4 border-none outline-none bg-transparent text-[#ececec]"
                 />
                 <button className="rounded-full bg-[#605e68] border-none p-2 flex items-center justify-center cursor-pointer">
-                    <img src="/arrow.png" alt="" className="w-4 h-4" />
+                    <img loading='lazy' src="/arrow.png" alt="" className="w-4 h-4" />
                 </button>
             </form>
         </div>

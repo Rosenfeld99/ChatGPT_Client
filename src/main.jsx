@@ -64,10 +64,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       frontendApi={FRONTEND_API}
       afterSignOutUrl="/"
     >
-      <RouterProvider
-        router={router}
-        basename="/ChatGPT_Client" // This makes sure the paths are relative to the subdirectory
-      />
+      <RouterProvider router={router} />
     </ClerkProvider>
   </React.Fragment>
 );
