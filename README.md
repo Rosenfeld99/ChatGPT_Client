@@ -1,6 +1,8 @@
 # CHAT AI
 
-This project is a Chat AI application designed to offer chat functionality, enhanced with a fully responsive interface. It includes authentication via Clerk, which allows login options via Google, LinkedIn and GitHub. The project uses a modern technology stack including React, Vite, TailwindCSS and React Query to manage the state. It also integrates with the Gemini API for image analysis.## Demo
+This project is a Chat AI application designed to offer chat functionality, enhanced with a fully responsive interface. It includes authentication via Clerk, which allows login options via Google, LinkedIn and GitHub. The project uses a modern technology stack including React, Vite, TailwindCSS and React Query to manage the state. It also integrates with the Gemini API for image analysis.
+
+## Demo
 
 ![Profile manage gif](https://res.cloudinary.com/djwetaeqt/image/upload/v1727816156/%D7%A2%D7%95%D7%AA%D7%A7_%D7%A9%D7%9C_cover_im2_wo0oej.png)
 
