@@ -1,6 +1,7 @@
+
 const App = () => {
   return (
-    <div>Hello World</div>
+    <div className=" bg-red-400">App</div>
   )
 }
 

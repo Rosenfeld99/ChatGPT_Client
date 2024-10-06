@@ -1,13 +1,10 @@
-import { useAuth } from '@clerk/clerk-react'
-import React, { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { useAuth } from '@clerk/clerk-react';
+import React, { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import ChatList from '../../components/chatList/ChatList';
-// import './dashboardLayout.css'
 
-const DashboardLayout = () => {
-
+const DashboardLayout: React.FC = () => {
   const { userId, isLoaded } = useAuth();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +26,6 @@ const DashboardLayout = () => {
       </div>
     </div>
   );
+};
 
-}
-
-export default DashboardLayout
+export default DashboardLayout;

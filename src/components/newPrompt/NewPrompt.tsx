@@ -1,26 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Upload from '../upload/Upload'
-import { IKImage } from 'imagekitio-react'
-import model from '../../lib/gemini'
+import React, { useEffect, useRef, useState } from 'react';
+import Upload from '../upload/Upload';
+import { IKImage } from 'imagekitio-react';
+import model from '../../lib/gemini';
 import Markdown from "react-markdown";
-import { QueryClient, useMutation, } from "@tanstack/react-query"
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import { useAuth } from '@clerk/clerk-react';
 
-const NewPrompt = ({ data }) => {
-    const { userId } = useAuth()
+interface NewPromptProps {
+    data: {
+        _id: string;
+        history: { role: string; parts: { text: string }[] }[];
+    };
+}
 
-    const [question, setQuestion] = useState("")
-    const [answer, setAnswer] = useState("")
-    const endRef = useRef()
-    const [img, setImg] = useState({
+interface ImgState {
+    isLoading: boolean;
+    error: string;
+    dbData: { filePath?: string };
+    aiData: Record<string, any>;
+}
+
+const NewPrompt: React.FC<NewPromptProps> = ({ data }) => {
+    const { userId } = useAuth();
+    const [question, setQuestion] = useState<string>("");
+    const [answer, setAnswer] = useState<string>("");
+    const endRef = useRef<HTMLDivElement>(null);
+    const [img, setImg] = useState<ImgState>({
         isLoading: false,
         error: "",
         dbData: {},
         aiData: {},
     });
-
-    // console.log(data);
-
 
     const mutation = useMutation({
         mutationFn: () => {
@@ -38,18 +48,16 @@ const NewPrompt = ({ data }) => {
             }).then((res) => res.json());
         },
         onSuccess: () => {
-            QueryClient
-                .invalidateQueries({ queryKey: ["chat", data._id] })
-                .then(() => {
-                    setQuestion("");
-                    setAnswer("");
-                    setImg({
-                        isLoading: false,
-                        error: "",
-                        dbData: {},
-                        aiData: {},
-                    });
+                setQuestion("");            QueryClient.invalidateQueries({ queryKey: ["chat", data._id] }).then(() => {
+
+                setAnswer("");
+                setImg({
+                    isLoading: false,
+                    error: "",
+                    dbData: {},
+                    aiData: {},
                 });
+            });
         },
         onError: (err) => {
             console.log(err);
@@ -72,23 +80,11 @@ const NewPrompt = ({ data }) => {
         }
     });
 
-    // const chat = model.startChat({
-    //     history: [
-    //       data?.history.map(({ role, parts }) => ({
-    //         role,
-    //         parts: [{ text: parts[0].text }],
-    //       })),
-    //     ],
-    //     generationConfig: {
-    //       // maxOutputTokens: 100,
-    //     },
-    //   });
-
     useEffect(() => {
-        endRef?.current && endRef?.current.scrollIntoView({ behavior: "smooth" })
-    }, [data, answer, question, img.dbData])
+        endRef.current && endRef.current.scrollIntoView({ behavior: "smooth" });
+    }, [data, answer, question, img.dbData]);
 
-    const add = async (text, isInitial) => {
+    const add = async (text: string, isInitial: boolean) => {
         if (!isInitial) setQuestion(text);
 
         try {
@@ -113,16 +109,16 @@ const NewPrompt = ({ data }) => {
         if (data?.history?.length === 1) {
             add(data.history[0].parts[0].text, true);
         }
-    }, [])
+    }, [data]);
 
-    const onSub = async (e) => {
+    const onSub = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const text = e.target.text.value;
+        const text = (e.target as HTMLFormElement).text.value;
         if (!text) return;
 
         add(text, false);
-        e.target.text.value = ""
+        (e.target as HTMLFormElement).text.value = "";
     };
 
     return (
@@ -143,7 +139,7 @@ const NewPrompt = ({ data }) => {
                 </div>
             )}
             <div ref={endRef} className="pb-[100px]" />
-            <form onSubmit={onSub} className=" w-[85%] sm:w-[93%] md:w-[80%] 2xl:w-1/2 absolute bottom-0 bg-[#1e1e1e] rounded-2xl flex items-center gap-5 px-2 md:px-5 py-0">
+            <form onSubmit={onSub} className="w-[85%] sm:w-[93%] md:w-[80%] 2xl:w-1/2 absolute bottom-0 bg-[#1e1e1e] rounded-2xl flex items-center gap-5 px-2 md:px-5 py-0">
                 <Upload setImg={setImg} />
                 <input id="file" type="file" multiple={false} hidden />
                 <input
@@ -158,7 +154,6 @@ const NewPrompt = ({ data }) => {
             </form>
         </div>
     );
+};
 
-}
-
-export default NewPrompt
+export default NewPrompt;

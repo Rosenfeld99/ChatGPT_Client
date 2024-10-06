@@ -1,12 +1,22 @@
-import React from 'react'
+import React from 'react';
 import { Link } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@clerk/clerk-react';
 
-const ChatList = ({ setIsOPen, isOPen }) => {
-    const { userId } = useAuth()
+interface Chat {
+    _id: string;
+    title: string;
+}
 
-    const { isLoading, error, data } = useQuery({
+interface ChatListProps {
+    setIsOPen: (isOpen: boolean) => void;
+    isOPen: boolean;
+}
+
+const ChatList: React.FC<ChatListProps> = ({ setIsOPen, isOPen }) => {
+    const { userId } = useAuth();
+
+    const { isLoading, error, data } = useQuery<Chat[], Error>({
         queryKey: ["userChats"],
         queryFn: () =>
             fetch(`https://chatgpt-backend-ggqm.onrender.com/api/userchats/${userId}`, {
@@ -23,21 +33,23 @@ const ChatList = ({ setIsOPen, isOPen }) => {
             <hr className="border-none h-[2px] bg-gray-300 opacity-10 rounded-lg my-5" />
             <span className="font-semibold text-xs mb-2">RECENT CHATS</span>
             <div className="flex flex-col overflow-y-auto overflow-x-auto flex-1">
-                {isLoading
-                    ? <span className=' flex items-center gap-5'>Loading... <img loading='lazy' className='w-5 aspect-square' src="/public/loadingGif.gif" alt="" /></span>
-                    : error
-                        ? "Something went wrong!"
-                        : data?.length > 0 && data?.reverse()?.map((chat) => (
-                            <Link
-                                onClick={() => setIsOPen && setIsOPen(false)}
-                                className="relative p-2 rounded-lg hover:bg-[#3c3c3c] mr-4"
-                                to={`/dashboard/chats/${chat._id}`}
-                                key={chat._id}
-                            >
-                                {chat.title}
-                                <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-r from-[#1e1e1e00] via-[#1e1e1e41] to-[#1e1e1e] hover:opacity-0 transition-opacity duration-300" />
-                            </Link>
-                        ))}
+                {isLoading ? (
+                    <span className='flex items-center gap-5'>Loading... <img loading='lazy' className='w-5 aspect-square' src="/loadingGif.gif" alt="Loading" /></span>
+                ) : error ? (
+                    "Something went wrong!"
+                ) : data?.length > 0 ? (
+                    data.reverse().map((chat) => (
+                        <Link
+                            onClick={() => setIsOPen && setIsOPen(false)}
+                            className="relative p-2 rounded-lg hover:bg-[#3c3c3c] mr-4"
+                            to={`/dashboard/chats/${chat._id}`}
+                            key={chat._id}
+                        >
+                            {chat.title}
+                            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-r from-[#1e1e1e00] via-[#1e1e1e41] to-[#1e1e1e] hover:opacity-0 transition-opacity duration-300" />
+                        </Link>
+                    ))
+                ) : null}
             </div>
             <hr className="border-none h-[2px] bg-gray-300 opacity-10 rounded-lg my-5" />
             <div className="mt-auto flex items-center gap-2 text-sm">
@@ -49,7 +61,6 @@ const ChatList = ({ setIsOPen, isOPen }) => {
             </div>
         </div>
     );
-
 }
 
-export default ChatList
+export default ChatList;

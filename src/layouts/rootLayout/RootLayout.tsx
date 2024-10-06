@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
-// import './rootLayout.css'
 import { ClerkProvider, SignedIn, SignedOut, SignInButton, useAuth, UserButton } from '@clerk/clerk-react'
 import {
     QueryClient,
