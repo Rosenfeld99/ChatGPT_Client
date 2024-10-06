@@ -49,7 +49,7 @@ This project is a Chat AI application with the following key capabilities:
 - Swagger: API documentation and testing.
 - Express: Server with Node,js.
 
-
+[🔗 Link to server repo](https://github.com/Rosenfeld99/ChatGPT_Backend)
 
 ## Setup Instructions
 
