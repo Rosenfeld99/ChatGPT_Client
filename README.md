@@ -90,7 +90,7 @@ Start the development server:
 ```
 ## State Management
 
-The global state of the application is managed using Context API, which allows for efficient state management and easy access to state across various components.
+The global state of the application is managed using Context API, which allows for efficient state management and easy access to state across various components With React Query.
 
 - Auth Context: Manages user authentication state.
 - Chat Context: Manages real-time messaging state.
