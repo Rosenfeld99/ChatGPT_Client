@@ -35,6 +35,9 @@ const ChatPage: React.FC = () => {
       }).then((res) => res.json()),
   });
 
+  console.log(`chatId : ${chatId} ----- userId : ${userId}`);
+  
+
   return (
     <div className="h-[calc(100%-1rem)] md:h-[calc(100%-2rem)] overflow-hidden flex flex-col items-center relative">
       <div className="flex-1 pt-12 w-full overflow-auto flex justify-center rounded-2xl bg-[#252526]">
